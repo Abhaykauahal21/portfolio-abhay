@@ -47,7 +47,7 @@ export default function AboutSection() {
       opacity: 1,
       transition: {
         duration: 0.8,
-        ease: [0.16, 1, 0.3, 1] as any,
+        ease: [0.16, 1, 0.3, 1] as const,
       },
     },
   }
@@ -71,7 +71,7 @@ export default function AboutSection() {
         </div>
       </div>
 
-      <motion.div 
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -89,7 +89,7 @@ export default function AboutSection() {
                 className="relative z-10 h-[90%] w-auto mx-auto mt-auto object-contain transition-transform duration-700 group-hover:scale-105"
               />
             </div>
-            
+
             {/* Experience Label */}
             <div className="absolute bottom-4 right-4 sm:right-12 px-4 py-2 rounded-full bg-background border border-border shadow-lg">
               <span className={cn(syne.className, "text-sm font-bold")}>3+ Years Exp.</span>
@@ -112,7 +112,7 @@ export default function AboutSection() {
 
             <motion.div variants={itemVariants} className="space-y-4">
               <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-                I am a <span className="text-foreground font-semibold">Full-Stack Developer</span> focused on creating clean, efficient, and user-centric web applications. 
+                I am a <span className="text-foreground font-semibold">Full-Stack Developer</span> focused on creating clean, efficient, and user-centric web applications.
                 I believe in the power of simple code and elegant design to solve complex problems.
               </p>
               <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
@@ -121,7 +121,7 @@ export default function AboutSection() {
             </motion.div>
 
             {/* Simple Grid */}
-            <motion.div 
+            <motion.div
               variants={itemVariants}
               className="grid grid-cols-2 gap-4 mt-2"
             >
@@ -138,7 +138,7 @@ export default function AboutSection() {
             {/* Tech Pill Grid */}
             <motion.div variants={itemVariants} className="flex flex-wrap justify-center lg:justify-start gap-2 mt-2">
               {["React", "Next.js", "Node.js", "TypeScript", "Docker"].map((tech) => (
-                <span 
+                <span
                   key={tech}
                   className="px-3 py-1.5 rounded-full border border-border bg-background/50 text-[10px] font-bold tracking-widest text-muted-foreground uppercase transition-all hover:border-primary/30 hover:text-primary"
                 >
