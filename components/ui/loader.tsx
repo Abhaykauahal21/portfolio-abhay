@@ -57,7 +57,7 @@ export const PremiumLoader = () => {
             scale: 1.1,
             opacity: 0,
             filter: "blur(20px)",
-            transition: { duration: 1, ease: [0.76, 0, 0.24, 1] } 
+            transition: { duration: 1, ease: [0.76, 0, 0.24, 1] as any } 
           }}
           className="fixed inset-0 z-[99999] flex flex-col items-center justify-center bg-black overflow-hidden perspective-1000"
         >

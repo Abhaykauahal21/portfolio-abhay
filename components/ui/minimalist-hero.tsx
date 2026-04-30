@@ -108,7 +108,7 @@ export const MinimalistHero = () => {
           <motion.h1
             initial={{ opacity: 0, y: 80 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.4 }}
+            transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] as any, delay: 0.4 }}
             className={cn(
               syne.className,
               "text-[clamp(2.5rem,14vw,8.5rem)] font-black leading-[0.8] tracking-tighter text-foreground perspective-1000"

@@ -560,7 +560,7 @@ export default function Home() {
               initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
               whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] as any }}
               className={cn(syne.className, "text-4xl md:text-7xl font-bold tracking-tighter mb-8")}
             >
               Curated <span className="text-primary italic">Professional</span> History
@@ -570,7 +570,7 @@ export default function Home() {
               initial={{ opacity: 0, filter: "blur(10px)", y: 20 }}
               whileInView={{ opacity: 1, filter: "blur(0px)", y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              transition={{ duration: 1, delay: 0.2, ease: [0.16, 1, 0.3, 1] as any }}
               className="text-lg md:text-xl text-muted-foreground/60 max-w-2xl mx-auto leading-relaxed mb-16"
             >
               A comprehensive look into my technical journey, academic milestones, and professional contributions in the digital space.
@@ -588,7 +588,7 @@ export default function Home() {
               <a
                 href="/resume.pdf"
                 target="_blank"
-                className="group relative flex items-center gap-6 px-14 py-7 rounded-full border border-primary/20 bg-background hover:bg-primary hover:text-primary-foreground transition-all duration-700 ease-[0.16,1,0.3,1] overflow-hidden shadow-2xl shadow-primary/5"
+                className="group relative flex items-center gap-6 px-14 py-7 rounded-full border border-primary/20 bg-background hover:bg-primary hover:text-primary-foreground transition-all duration-700 overflow-hidden shadow-2xl shadow-primary/5"
               >
                 <span className="text-sm font-black tracking-[0.4em] uppercase relative z-10">Download CV</span>
                 <Download className="size-5 relative z-10 transition-transform group-hover:translate-y-1" />
