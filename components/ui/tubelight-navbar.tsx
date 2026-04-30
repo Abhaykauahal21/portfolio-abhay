@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { LucideIcon } from "lucide-react"
@@ -19,6 +19,47 @@ interface NavBarProps {
 
 export function NavBar({ items, className }: NavBarProps) {
   const [activeTab, setActiveTab] = useState(items[0].name)
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: "-20% 0px -70% 0px", // Trigger when section is in the top-middle of the viewport
+      threshold: 0,
+    }
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const sectionId = entry.target.id
+          const matchedItem = items.find((item) => item.url === `#${sectionId}`)
+          if (matchedItem) {
+            setActiveTab(matchedItem.name)
+          }
+        }
+      })
+    }
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions)
+
+    // Observe all sections that correspond to nav items
+    items.forEach((item) => {
+      const sectionId = item.url.replace("#", "")
+      const element = document.getElementById(sectionId)
+      if (element) {
+        observer.observe(element)
+      }
+    })
+
+    return () => {
+      items.forEach((item) => {
+        const sectionId = item.url.replace("#", "")
+        const element = document.getElementById(sectionId)
+        if (element) {
+          observer.unobserve(element)
+        }
+      })
+    }
+  }, [items])
 
   return (
     <div
@@ -40,7 +81,7 @@ export function NavBar({ items, className }: NavBarProps) {
               className={cn(
                 "relative cursor-pointer text-sm font-semibold px-3 py-2 rounded-full transition-colors sm:px-6",
                 "text-foreground/80 hover:text-primary",
-                isActive && "bg-muted text-primary"
+                isActive && "text-primary"
               )}
             >
               <span className="hidden md:inline">{item.name}</span>

@@ -3,8 +3,14 @@
 import React, { useRef, useState } from "react";
 import { useScroll, useTransform, motion, MotionValue, useMotionValueEvent } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink, Github, ArrowUpRight } from "lucide-react";
 import { DottedSurface } from "@/components/dotted-surface";
+import { Syne } from "next/font/google";
+
+const syne = Syne({
+  subsets: ["latin"],
+  weight: ["400", "700", "800"],
+})
 
 interface Project {
   title: string;
@@ -43,15 +49,11 @@ export const ProjectsShowcase = ({ projects }: ProjectsShowcaseProps) => {
     };
   }, []);
 
-  // Update current project based on scroll progress - one project per scroll segment
+  // Update current project based on scroll progress
   useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    // Clamp the progress between 0 and 1
     const clampedProgress = Math.max(0, Math.min(1, latest));
-    // Divide scroll progress into equal segments, one for each project
     const segmentSize = 1 / projects.length;
-    // Calculate which segment we're in
     let index = Math.floor(clampedProgress / segmentSize);
-    // Ensure index is within bounds
     index = Math.min(index, projects.length - 1);
     index = Math.max(0, index);
     
@@ -61,67 +63,44 @@ export const ProjectsShowcase = ({ projects }: ProjectsShowcaseProps) => {
   });
 
   const scaleDimensions = () => {
-    return isMobile ? [0.7, 0.9] : [1.05, 1];
+    return isMobile ? [0.8, 0.95] : [1.02, 1];
   };
 
-  // Animation values based on full scroll progress - smooth continuous animation
-  const rotate = useTransform(scrollYProgress, [0, 1], [20, 0]);
+  const rotate = useTransform(scrollYProgress, [0, 1], [15, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], scaleDimensions());
-  const translate = useTransform(scrollYProgress, [0, 1], [0, -100]);
 
   const currentProject = projects[currentProjectIndex] || projects[0];
 
   return (
-    <section id="projects" className="relative overflow-hidden bg-background py-20">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <DottedSurface className="absolute inset-0" />
-        <div
-          aria-hidden="true"
-          className={cn(
-            "pointer-events-none absolute -top-10 left-1/2 size-full -translate-x-1/2 rounded-full",
-            "bg-[radial-gradient(ellipse_at_center,--theme(--color-foreground/.1),transparent_50%)]",
-            "blur-[30px]"
-          )}
-        />
-      </div>
+    <div className="relative w-full py-10 md:py-20" ref={containerRef}>
       <div
-        className="relative z-10 h-[20rem] md:h-[50rem] flex items-center justify-center p-2 md:p-20"
-        ref={containerRef}
+        className="w-full relative"
+        style={{
+          perspective: "1200px",
+        }}
       >
-        <div
-          className="py-10 md:py-40 w-full relative"
-          style={{
-            perspective: "1000px",
-          }}
-        >
-        
+        <ProjectCard 
+          rotate={rotate} 
+          scale={scale}
+          project={currentProject}
+          index={currentProjectIndex}
+        />
 
-          <ProjectCard 
-            rotate={rotate} 
-            // translate={translate} 
-            scale={scale}
-            project={currentProject}
-            index={currentProjectIndex}
-            totalProjects={projects.length}
-          />
-
-          {/* Project Indicators */}
-          <div className="flex justify-center gap-2 mt-8">
-            {projects.map((_, index) => (
-              <div
-                key={index}
-                className={cn(
-                  "h-2 rounded-full transition-all duration-300",
-                  index === currentProjectIndex
-                    ? "w-8 bg-primary"
-                    : "w-2 bg-muted-foreground/30"
-                )}
-              />
-            ))}
-          </div>
+        {/* Project Indicators */}
+        <div className="flex justify-center gap-3 mt-12">
+          {projects.map((_, index) => (
+            <motion.div
+              key={index}
+              animate={{ 
+                width: index === currentProjectIndex ? 32 : 8,
+                backgroundColor: index === currentProjectIndex ? "var(--primary)" : "rgba(var(--primary-rgb), 0.2)"
+              }}
+              className="h-2 rounded-full transition-colors duration-300"
+            />
+          ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
@@ -130,13 +109,11 @@ const ProjectCard = ({
   scale,
   project,
   index,
-  totalProjects,
 }: {
   rotate: MotionValue<number>;
   scale: MotionValue<number>;
   project: Project;
   index: number;
-  totalProjects: number;
 }) => {
   return (
     <motion.div
@@ -144,87 +121,100 @@ const ProjectCard = ({
       style={{
         rotateX: rotate,
         scale,
-        boxShadow:
-          "0 0 #0000004d, 0 9px 20px #0000004a, 0 37px 37px #00000042, 0 84px 50px #00000026, 0 149px 60px #0000000a, 0 233px 65px #00000003",
       }}
-      className={cn(
-        "max-w-5xl -mt-12 mx-auto h-[30rem] md:h-[40rem] w-full",
-        "border-4 border-border p-2 md:p-6 bg-card rounded-[30px] shadow-2xl"
-      )}
-      initial={{ opacity: 0, y: 50 }}
+      initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      exit={{ opacity: 0, y: -30 }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      className={cn(
+        "max-w-5xl mx-auto h-[35rem] md:h-[45rem] w-full relative",
+        "border border-border/50 p-2 md:p-4 bg-card/20 backdrop-blur-xl rounded-[40px] shadow-2xl overflow-hidden group"
+      )}
     >
-      <div className="h-full w-full overflow-hidden rounded-2xl bg-background md:rounded-2xl md:p-6 flex flex-col">
-        {/* Project Image/Placeholder */}
+      <div className="h-full w-full overflow-hidden rounded-[32px] bg-background/40 flex flex-col">
+        {/* Project Image Container */}
         <div
           className={cn(
-            "flex-1 bg-gradient-to-br from-primary/20 to-primary/5 rounded-lg mb-4 flex items-center justify-center overflow-hidden",
+            "relative h-[55%] md:h-[65%] w-full bg-gradient-to-br from-primary/5 via-transparent to-primary/10 flex items-center justify-center overflow-hidden",
             project.imageContainerClassName
           )}
         >
           {project.image ? (
-            <img
+            <motion.img
+              initial={{ scale: 1.1 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 1.2 }}
               src={project.image}
               alt={project.title}
               className={cn(
-                "w-full h-full rounded-lg",
-                project.imageFit === "contain" ? "object-contain" : "object-cover"
+                "w-full h-full transition-transform duration-700 group-hover:scale-105",
+                project.imageFit === "contain" ? "object-contain p-8" : "object-cover"
               )}
             />
           ) : (
-            <div className="text-6xl md:text-8xl font-bold text-primary/20">
+            <div className="text-8xl font-black text-primary/5 uppercase">
               {project.title.charAt(0)}
             </div>
           )}
+          
+          {/* Overlay Tag */}
+          <div className="absolute top-6 left-6 px-4 py-1.5 rounded-full bg-background/80 backdrop-blur-md border border-white/10 text-[10px] font-bold tracking-widest uppercase">
+            Featured Project
+          </div>
         </div>
 
         {/* Project Info */}
-        <div className="space-y-4">
-          <div>
-            <h3 className="text-2xl md:text-3xl font-bold mb-2">{project.title}</h3>
-            <p className="text-muted-foreground">{project.description}</p>
+        <div className="flex-1 p-6 md:p-10 flex flex-col justify-between">
+          <div className="space-y-4">
+            <div className="flex items-start justify-between">
+               <h3 className={cn(syne.className, "text-2xl md:text-4xl font-bold tracking-tight")}>
+                 {project.title}
+               </h3>
+               <div className="flex gap-3">
+                 {project.githubUrl && (
+                   <a 
+                    href={project.githubUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full border border-border hover:bg-muted transition-colors"
+                   >
+                     <Github className="size-5" />
+                   </a>
+                 )}
+                 {project.liveUrl && (
+                   <a 
+                    href={project.liveUrl} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="p-2 rounded-full bg-foreground text-background hover:scale-110 transition-transform"
+                   >
+                     <ArrowUpRight className="size-5" />
+                   </a>
+                 )}
+               </div>
+            </div>
+            
+            <p className="max-w-2xl text-sm md:text-lg text-muted-foreground/80 leading-relaxed">
+              {project.description}
+            </p>
           </div>
 
-          {/* Technologies */}
-          <div className="flex flex-wrap gap-2">
+          {/* Technologies Footer */}
+          <div className="flex flex-wrap gap-2 pt-4 border-t border-border/50">
             {project.technologies.map((tech, idx) => (
               <span
                 key={idx}
-                className="px-3 py-1 text-xs md:text-sm bg-muted rounded-full text-foreground"
+                className="px-3 py-1 text-[10px] md:text-xs font-bold tracking-wider bg-primary/5 text-primary border border-primary/10 rounded-full uppercase"
               >
                 {tech}
               </span>
             ))}
           </div>
-
-          {/* Links */}
-          <div className="flex gap-4 pt-2">
-            {project.liveUrl && (
-              <a
-                href={project.liveUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors"
-              >
-                <ExternalLink className="w-4 h-4" />
-                Live Demo
-              </a>
-            )}
-            {project.githubUrl && (
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 px-4 py-2 border border-border rounded-lg hover:bg-muted transition-colors"
-              >
-                <Github className="w-4 h-4" />
-                GitHub
-              </a>
-            )}
-          </div>
         </div>
       </div>
+      
+      {/* Decorative Gradient Glow */}
+      <div className="absolute -bottom-20 -right-20 size-64 bg-primary/10 blur-[100px] pointer-events-none" />
     </motion.div>
   );
 };
