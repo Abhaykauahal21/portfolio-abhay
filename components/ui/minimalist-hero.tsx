@@ -22,7 +22,28 @@ const playfair = Playfair_Display({
   weight: ["400", "700"],
 });
 
-export const MinimalistHero = () => {
+interface MinimalistHeroProps {
+  logoText?: string;
+  mainText?: string;
+  readMoreLink?: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  overlayText?: {
+    part1: string;
+    part2: string;
+  };
+  locationText?: string;
+}
+
+export const MinimalistHero = ({
+  logoText = "Abhay.",
+  mainText = "Abhay Kaushal",
+  readMoreLink = "#about",
+  imageSrc = "/abhay.png",
+  imageAlt = "Abhay Kaushal Portrait",
+  overlayText = { part1: "Digital", part2: "Architect" },
+  locationText = "Based in India"
+}: MinimalistHeroProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollY } = useScroll();
 
@@ -114,8 +135,11 @@ export const MinimalistHero = () => {
               "text-[clamp(2.5rem,14vw,8.5rem)] font-black leading-[0.8] tracking-tighter text-foreground perspective-1000"
             )}
           >
-            ABHAY <br />
-            KAUSHAL
+            {mainText.split(' ').map((word, i) => (
+              <React.Fragment key={i}>
+                {word} {i === 0 && <br />}
+              </React.Fragment>
+            ))}
           </motion.h1>
           
           {/* Floating Role Label */}
@@ -126,7 +150,7 @@ export const MinimalistHero = () => {
             className="absolute -top-8 -right-4 md:-right-24 rotate-6"
           >
             <span className={cn(playfair.className, "text-3xl md:text-6xl text-primary font-bold italic drop-shadow-2xl")}>
-              Digital Architect
+              {overlayText.part1} {overlayText.part2}
             </span>
           </motion.div>
         </motion.div>
@@ -154,7 +178,12 @@ export const MinimalistHero = () => {
         </motion.div>
       </motion.div>
 
-      {/* Symmetrical Vertical Strips - Modern Aesthetic */}
+      {/* Corner Meta Info */}
+      <div className="absolute top-12 left-12 flex flex-col gap-1 z-20">
+         <span className={cn(syne.className, "text-[10px] font-black tracking-[0.5em] text-primary uppercase")}>{logoText}</span>
+         <span className="text-[9px] font-bold tracking-[0.3em] text-muted-foreground/40 uppercase">{locationText}</span>
+      </div>
+      
       <div className="hidden lg:block absolute left-12 top-1/2 -translate-y-1/2 h-64 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
       <div className="hidden lg:block absolute right-12 top-1/2 -translate-y-1/2 h-64 w-px bg-gradient-to-b from-transparent via-border to-transparent" />
       
