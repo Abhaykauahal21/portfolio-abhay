@@ -394,7 +394,7 @@ export default function Home() {
                     initial={{ opacity: 0, x: i % 2 === 0 ? 50 : -50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
-                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] as any }}
                     className="w-[calc(100%-4rem)] md:w-[calc(50%-4rem)] p-8 rounded-[2.5rem] border border-border/50 bg-card/5 backdrop-blur-xl hover:border-primary/30 transition-all duration-500 relative overflow-hidden group/card"
                   >
                     {/* Card Shine */}

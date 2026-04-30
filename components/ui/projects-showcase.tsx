@@ -125,7 +125,7 @@ const ProjectCard = ({
       initial={{ opacity: 0, y: 30 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -30 }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] as any }}
       className={cn(
         "max-w-5xl mx-auto h-[35rem] md:h-[45rem] w-full relative",
         "border border-border/50 p-2 md:p-4 bg-card/20 backdrop-blur-xl rounded-[40px] shadow-2xl overflow-hidden group"
